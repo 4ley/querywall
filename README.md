@@ -1,3 +1,4 @@
+# QueryWall: Plug'n Play Firewall
 Autopilot protection for your WordPress against malicious URL requests.
 
 ## How it works
