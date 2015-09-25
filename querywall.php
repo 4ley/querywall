@@ -91,8 +91,10 @@ class QueryWall {
 	 */
 	public static function rate( $links, $file ) {
 		if ( plugin_basename( __FILE__ ) == $file ) {
-			$url = 'http://wordpress.org/support/view/plugin-reviews/' . basename( dirname( __FILE__ ) ) . '?rate=5#postform';
-			$links[] = '<a target="_blank" href="' . $url . '" title="Click here to rate and review this plugin on WordPress.org">Rate this plugin</a>';
+			$wp_url = 'https://wordpress.org/support/view/plugin-reviews/' . basename( dirname( __FILE__ ) ) . '?rate=5#postform';
+			$fb_url = 'https://www.facebook.com/QueryWall-Plugn-Play-Firewall-474820996034299/';
+			$links[] = '<a target="_blank" href="' . $wp_url . '" title="Rate and review QueryWall on WordPress.org">Rate this plugin</a>';
+			$links[] = '<a target="_blank" href="' . $fb_url . '" title="Visit QueryWall on Facebook">Visit on Facebook</a>';
 		}
 		return $links;
 	}
