@@ -2,7 +2,7 @@
 
 Contributors: 4ley
 Tags: firewall, security, protect, block, antivirus, defender, malicious, request, query, blacklist, url, eval, base64, hack
-Requires at least: 3.9
+Requires at least: 3.1
 Tested up to: 4.3
 Stable tag: trunk
 License: GPLv2 or later
