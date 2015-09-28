@@ -8,7 +8,7 @@
  * Version: 1.0.0
  * Author: 4ley
  * Author URI: https://github.com/4ley/querywall
- * Requires at least: 4.0
+ * Requires at least: 3.1
  * Tested up to: 4.3
  * Stable tag: trunk
  * License: GPLv2 or later
