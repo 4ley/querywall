@@ -42,6 +42,8 @@ Use the WordPress build-in update functionality, or remove the old version and r
 
 == Screenshots ==
 
+1. Firewall request monitor shows prevented attacks.
+
 == Changelog ==
 
 = 1.0.1 =
