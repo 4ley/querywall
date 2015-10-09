@@ -42,8 +42,6 @@ Use the WordPress build-in update functionality, or remove the old version and r
 
 == Screenshots ==
 
-QueryWall has no admin panel, so no screenshots.
-
 == Changelog ==
 
 = 1.0.1 =
