@@ -46,6 +46,10 @@ Use the WordPress build-in update functionality, or remove the old version and r
 
 == Changelog ==
 
+= 1.0.2 =
+
+* POST FILES filter added
+
 = 1.0.1 =
 
 * Firewall request monitor added
