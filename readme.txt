@@ -46,6 +46,10 @@ Use the WordPress build-in update functionality, or remove the old version and r
 
 == Changelog ==
 
+= 1.0.3 =
+
+* Filter and load_plugin_first added
+
 = 1.0.2 =
 
 * POST FILES filter added
