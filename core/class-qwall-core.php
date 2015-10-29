@@ -45,6 +45,7 @@ class QWall_Core {
 			register_activation_hook( $plugin_file, array( 'QWall_Setup', 'on_activate' ) );
 			register_deactivation_hook( $plugin_file, array( 'QWall_Setup', 'on_deactivate' ) );
 			register_uninstall_hook( $plugin_file, array( 'QWall_Setup', 'on_uninstall' ) );
+			add_action( 'activated_plugin', array( 'QWall_Setup', 'on_activated_plugin' ) );
 			add_action( 'admin_menu', array( 'QWall_Admin', 'build_admin' ) );
 			add_filter( 'plugin_row_meta', array( 'QWall_Admin', 'rate' ), 10, 2 );
 		}

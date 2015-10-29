@@ -44,6 +44,16 @@ class QWall_Setup {
 	}
 
 	/**
+	 * Foreign plugin activated
+	 *
+	 * @since 1.0.1
+	 * @return void
+	 */
+	public static function on_activated_plugin() {
+		self::load_plugin_first();
+	}
+
+	/**
 	 * Creates appropriate database tables
 	 *
 	 * Uses dbDelta to create database tables completely or if one is missing.
@@ -93,6 +103,24 @@ class QWall_Setup {
 		global $wpdb;
 
 		$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->base_prefix . "qwall_monitor;" );
+	}
+
+	/**
+	 * Make sure plugin loads first
+	 *
+	 * @since 1.0.3
+	 * @return void
+	 */
+	private static function load_plugin_first() {
+
+		if ( $plugins = get_option( 'active_plugins' ) ) {
+			$basename = plugin_basename( QWall_Core::$settings['plugin_file'] );
+			if ( $key = array_search( $basename, $plugins ) ) {
+				array_splice( $plugins, $key, 1 );
+				array_unshift( $plugins, $basename );
+				update_option( 'active_plugins', $plugins );
+			}
+		}
 	}
 }
 
