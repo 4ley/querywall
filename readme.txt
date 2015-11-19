@@ -3,7 +3,7 @@
 Contributors: 4ley
 Tags: firewall, security, protect, block, antivirus, defender, malicious, request, query, blacklist, url, eval, base64, hack, attack, brute force, infection, injection, malware, prevention, protection, trojan, virus, xss, waf
 Requires at least: 3.1
-Tested up to: 4.3
+Tested up to: 4.4
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
