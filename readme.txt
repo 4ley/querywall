@@ -46,6 +46,14 @@ Use the WordPress build-in update functionality, or remove the old version and r
 
 == Changelog ==
 
+= 1.0.5 =
+
+* Clear logs now and periodically added
+
+= 1.0.4 =
+
+* WordPress compatibility test
+
 = 1.0.3 =
 
 * Filter and load_plugin_first added

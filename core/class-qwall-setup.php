@@ -41,6 +41,7 @@ class QWall_Setup {
 	 */
 	public static function on_uninstall() {
 		self::remove_database_tables();
+		self::remove_scheduled_events();
 	}
 
 	/**
@@ -103,6 +104,17 @@ class QWall_Setup {
 		global $wpdb;
 
 		$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->base_prefix . "qwall_monitor;" );
+	}
+
+	/**
+	 * Unschedule all events
+	 *
+	 * @since 1.0.5
+	 * @return void
+	 */
+	private static function remove_scheduled_events() {
+
+		QWall_Util::unschedule_event( 'qwall_purge_logs' );
 	}
 
 	/**

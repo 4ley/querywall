@@ -82,12 +82,11 @@ class QWall_Monitor extends WP_List_Table {
 
 		switch( $column_name ) {
 			case 'date_time':
-				return '<span title="' .$item[ 'date_time' ]. '">' . human_time_diff( $item[ 'time_stamp' ], current_time( 'timestamp' ) ) . ' ago';
+				return '<span title="' . $item['date_time'] . '">' . human_time_diff( $item['time_stamp'], current_time( 'timestamp' ) ) . ' ago';
 			case 'ipv4':
 				return long2ip( $item[ $column_name ] );
 			case 'filter_input':
-				return preg_replace( '/'. preg_quote( $item[ 'filter_match' ], '/' ) .'/i', '<strong>\\0</strong>', $item[ 'filter_input' ] );
- 
+				return preg_replace( '/' . preg_quote( $item['filter_match'], '/' ) . '/i', '<strong>\\0</strong>', $item['filter_input'] );
 			default:
 				return $item[ $column_name ];
 		}
@@ -112,7 +111,7 @@ class QWall_Monitor extends WP_List_Table {
 		$extra_sql = "ORDER BY " . esc_sql( $orderby ) . " " . esc_sql( $order );
 
 		$count = $wpdb->get_var( "SELECT COUNT(*) FROM `" . $wpdb->base_prefix . "qwall_monitor` " . $extra_sql . ";" );
-		$items = $wpdb->get_results("SELECT date_time, UNIX_TIMESTAMP(date_time) AS time_stamp, ipv4, filter_group, filter_match, filter_input FROM `" . $wpdb->base_prefix . "qwall_monitor` " . $extra_sql . " LIMIT " . absint( $offset ) . ", " . absint( $limit ) . ";", ARRAY_A );
+		$items = $wpdb->get_results( "SELECT date_time, UNIX_TIMESTAMP(date_time) AS time_stamp, ipv4, filter_group, filter_match, filter_input FROM `" . $wpdb->base_prefix . "qwall_monitor` " . $extra_sql . " LIMIT " . absint( $offset ) . ", " . absint( $limit ) . ";", ARRAY_A );
 
 		return $items;
 	}
