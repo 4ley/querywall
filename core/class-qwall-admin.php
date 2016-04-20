@@ -47,11 +47,17 @@ class QWall_Admin {
 		require( dirname( __FILE__ ) . '/class-qwall-monitor.php' );
 
 		if ( $event_purge_next_run = wp_next_scheduled( 'qwall_purge_logs', 24 ) ) {
-			$event_purge_older_than = __( '24 hours', 'querywall' );
-		} else if ( $event_purge_next_run = wp_next_scheduled( 'qwall_purge_logs', 48 ) ) {
-			$event_purge_older_than = __( '48 hours', 'querywall' );
+			$event_purge_older_than = __( '1 day', 'querywall' );
 		} else if ( $event_purge_next_run = wp_next_scheduled( 'qwall_purge_logs', 72 ) ) {
-			$event_purge_older_than = __( '72 hours', 'querywall' );
+			$event_purge_older_than = __( '3 days', 'querywall' );
+		} else if ( $event_purge_next_run = wp_next_scheduled( 'qwall_purge_logs', 120 ) ) {
+			$event_purge_older_than = __( '5 days', 'querywall' );
+		} else if ( $event_purge_next_run = wp_next_scheduled( 'qwall_purge_logs', 168 ) ) {
+			$event_purge_older_than = __( '1 week', 'querywall' );
+		} else if ( $event_purge_next_run = wp_next_scheduled( 'qwall_purge_logs', 336 ) ) {
+			$event_purge_older_than = __( '2 weeks', 'querywall' );
+		} else if ( $event_purge_next_run = wp_next_scheduled( 'qwall_purge_logs', 672 ) ) {
+			$event_purge_older_than = __( '4 weeks', 'querywall' );
 		} else if ( $event_purge_next_run = wp_next_scheduled( 'qwall_purge_logs', 0 ) ) {
 			$event_purge_older_than = '"' . __( 'the big bank', 'querywall' ) . '"';
 		} else {
@@ -83,15 +89,18 @@ class QWall_Admin {
 			<div id="poststuff" class="wrap">
 				<h2><?php echo get_admin_page_title(); ?></h2>
 				<div class="postbox">
-					<h3>Options</h3>
+					<h3 class="hndle"><?php _e( 'Options', 'querywall' ); ?></h3>
 					<div class="inside">
 						<form method="post" action="">
 							<?php wp_nonce_field( 'qwall_purge_logs', 'qwall_purge_logs_nonce' ); ?>
 							<?php _e( 'Clear logs older than', 'querywall' ); ?>
 							<select name="qwall_purge_logs_older_than">
-								<option value="24"><?php _e( '24 hours', 'querywall' ); ?></option>
-								<option value="48"><?php _e( '48 hours', 'querywall' ); ?></option>
-								<option value="72"><?php _e( '72 hours', 'querywall' ); ?></option>
+								<option value="24"><?php _e( '1 day', 'querywall' ); ?></option>
+								<option value="72"><?php _e( '3 days', 'querywall' ); ?></option>
+								<option value="120"><?php _e( '5 days', 'querywall' ); ?></option>
+								<option value="168"><?php _e( '1 week', 'querywall' ); ?></option>
+								<option value="336"><?php _e( '2 weeks', 'querywall' ); ?></option>
+								<option value="672"><?php _e( '4 weeks', 'querywall' ); ?></option>
 								<option value="0"><?php _e( 'the big bang', 'querywall' ); ?></option>
 							</select> |
 							<input class="button-primary" type="submit" name="qwall_purge_logs_now" value="<?php _e( 'Clear now', 'querywall' ); ?>">
@@ -138,7 +147,7 @@ class QWall_Admin {
 
 		if ( $older_than_hours == 0 ) {
 			$wpdb->query( "DELETE FROM `" . $wpdb->base_prefix . "qwall_monitor`;" );
-		} else if( in_array( $older_than_hours, array( 24, 48, 72 ) ) ) {
+		} else if( in_array( $older_than_hours, array( 24, 72, 120, 168, 336, 672 ) ) ) {
 			$wpdb->query( "DELETE FROM `" . $wpdb->base_prefix . "qwall_monitor` WHERE `date_time_gmt` < '" . current_time( 'mysql', 1 ) . "' - INTERVAL " . esc_sql( ( int ) $older_than_hours ) . " HOUR;" );
 		}
 	}

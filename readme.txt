@@ -48,7 +48,7 @@ Use the WordPress build-in update functionality, or remove the old version and r
 
 = 1.0.5 =
 
-* Clear logs now and periodically added
+* Functionality to clear logs immediately and periodically added
 
 = 1.0.4 =
 
