@@ -80,15 +80,16 @@ class QWall_Admin {
 					border-radius: 2px;
 					background-color: #ffff8c;
 				}
-				#poststuff > p { margin: 5px 0 -20px; color: #666; }
+				#poststuff { margin-top: 10px; padding-top: 0; }
+				#poststuff + p { margin: 5px 0 -20px; color: #666; }
 				#poststuff form > p { margin-bottom: 0; }
 				#poststuff form > p > span { cursor: help; border-bottom: 1px dotted #aaa; }
 				#poststuff input,
 				#poststuff select { vertical-align: baseline; }
 			</style>
-			<div id="poststuff" class="wrap">
+			<div class="wrap">
 				<h2><?php echo get_admin_page_title(); ?></h2>
-				<div class="postbox">
+				<div id="poststuff" class="postbox">
 					<h3 class="hndle"><?php _e( 'Options', 'querywall' ); ?></h3>
 					<div class="inside">
 						<form method="post" action="">
