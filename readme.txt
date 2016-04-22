@@ -1,7 +1,7 @@
 === QueryWall: Plug'n Play Firewall ===
 
 Contributors: 4ley
-Tags: firewall, security, protect, block, antivirus, defender, malicious, request, query, blacklist, url, eval, base64, hack, attack, brute force, infection, injection, malware, prevention, protection, trojan, virus, xss, waf
+Tags: firewall, security, protect, block, antivirus, defender, malicious, request, query, blacklist, url, eval, base64, hack, attack, brute force, infection, injection, malware, botnet, backdoor, web application firewall, xss, website security, wordpress security, secure, prevention, protection, trojan, virus, xss, waf, security audit, querywall, bbq, block bad queries, ninjafirewall, wordfence, bulletproof security, ithemes security, better wp security, sucuri, vaultpress, simple firewall
 Requires at least: 3.1
 Tested up to: 4.5
 Stable tag: trunk
@@ -28,7 +28,7 @@ QueryWall analyzes all incoming HTTP requests and silently blocks malicious quer
 
 **Contribution / Social**
 
-Contribute to [QueryWall at GitHub](https://github.com/4ley/querywall) or follow [QueryWall at Facebook](https://www.facebook.com/QueryWall-Plugn-Play-Firewall-474820996034299/)
+Contribute to [QueryWall at GitHub](https://github.com/4ley/querywall) or follow [QueryWall at Facebook](https://www.facebook.com/querywall)
 
 == Installation ==
 

@@ -56,6 +56,7 @@ class QWall_Core {
 
 		require_once( $dirname . '/core/class-qwall-util.php' );
 		require_once( $dirname . '/core/class-qwall-setup.php' );
+		require_once( $dirname . '/core/class-qwall-notice.php' );
 		require_once( $dirname . '/core/class-qwall-admin.php' );
 		register_activation_hook( self::$settings['plugin_file'], array( 'QWall_Setup', 'on_activate' ) );
 		register_deactivation_hook( self::$settings['plugin_file'], array( 'QWall_Setup', 'on_deactivate' ) );
@@ -71,8 +72,21 @@ class QWall_Core {
 			
 			if ( wp_verify_nonce( $_POST['qwall_purge_logs_nonce'], 'qwall_purge_logs' ) ) {
 				
-				do_action( 'qwall_purge_logs', ( int ) $_POST['qwall_purge_logs_older_than'] );
-				add_action( 'admin_notices', array( 'QWall_Admin', 'render_admin_notice' ) );
+				$affected_rows = QWall_Admin::purge_logs( ( int ) $_POST['qwall_purge_logs_older_than'] );
+				
+				if ( false === $affected_rows ) {
+
+					new QWall_Notice(
+						__( 'Oh noes! An error occurred while attempting to purge the logs. You may open a support ticket here <a href="https://wordpress.org/support/plugin/querywall">QueryWall Support Forum</a> or here <a href="https://github.com/4ley/querywall/issues">Github QueryWall Issues</a>.', 'querywall' ),
+						array( 'notice-error', 'is-dismissible' )
+					);
+				} else {
+
+					new QWall_Notice(
+						sprintf( _n( 'Success! %s entry purged.', 'Success! %s entries purged.', $affected_rows, 'querywall' ), $affected_rows ),
+						array( 'notice-success', 'is-dismissible' )
+					);
+				}
 			}
 		}
 
@@ -86,9 +100,12 @@ class QWall_Core {
 
 				if( isset( $_POST['qwall_purge_logs_daily'] ) ) {
 					wp_schedule_event( current_time( 'timestamp' ), 'daily', 'qwall_purge_logs', ( int ) $_POST['qwall_purge_logs_older_than'] );
+					$message = __( 'Success! You have scheduled to purge logs periodically.', 'querywall' );
+				} else {
+					$message = __( 'Success! You have unscheduled periodical cleaning.', 'querywall' );
 				}
 
-				add_action( 'admin_notices', array( 'QWall_Admin', 'render_admin_notice' ) );
+				new QWall_Notice( $message, array( 'notice-success', 'is-dismissible' ) );
 			}
 		}
 	}
