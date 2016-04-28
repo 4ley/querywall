@@ -29,15 +29,16 @@ class QWall_Core {
 	 */
 	public static function init( $plugin_file ) {
 
-		$dirname = dirname( __FILE__ );
-
 		self::$settings = array(
 			'plugin_file' => $plugin_file,
 
 		);
 
-		require_once( $dirname . '/class-qwall-firewall.php' );
-		QWall_Firewall::init();
+		$dirname = dirname( self::$settings['plugin_file'] );
+
+		require_once( $dirname . '/core/class-qwall-dic.php' );
+		require_once( $dirname . '/core/class-qwall-settings.php' );
+		require_once( $dirname . '/core/class-qwall-firewall.php' );
 
 		if ( is_admin() ) {
 			self::admin_init();
@@ -58,13 +59,11 @@ class QWall_Core {
 		require_once( $dirname . '/core/class-qwall-setup.php' );
 		require_once( $dirname . '/core/class-qwall-notice.php' );
 		require_once( $dirname . '/core/class-qwall-admin.php' );
+
 		register_activation_hook( self::$settings['plugin_file'], array( 'QWall_Setup', 'on_activate' ) );
 		register_deactivation_hook( self::$settings['plugin_file'], array( 'QWall_Setup', 'on_deactivate' ) );
 		register_uninstall_hook( self::$settings['plugin_file'], array( 'QWall_Setup', 'on_uninstall' ) );
 		add_action( 'activated_plugin', array( 'QWall_Setup', 'on_activated_plugin' ) );
-		add_action( 'admin_menu', array( 'QWall_Admin', 'build_admin' ) );
-		add_filter( 'plugin_row_meta', array( 'QWall_Admin', 'rate' ), 10, 2 );
-		add_action( 'qwall_purge_logs', array( 'QWall_Admin', 'purge_logs' ) );
 
 		if ( isset( $_POST['qwall_purge_logs_now'] ) ) {
 			
@@ -72,7 +71,7 @@ class QWall_Core {
 			
 			if ( wp_verify_nonce( $_POST['qwall_purge_logs_nonce'], 'qwall_purge_logs' ) ) {
 				
-				$affected_rows = QWall_Admin::purge_logs( ( int ) $_POST['qwall_purge_logs_older_than'] );
+				$affected_rows = QWall_DIC::get( 'admin' )->purge_logs( ( int ) $_POST['qwall_purge_logs_older_than'] );
 				
 				if ( false === $affected_rows ) {
 

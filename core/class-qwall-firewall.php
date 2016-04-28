@@ -29,12 +29,39 @@ class QWall_Firewall {
 	);
 
 	/**
-	 * Magic starts here
+	 * Magic starts here.
 	 *
-	 * @since 1.0.1
+	 * All custom functionality will be hooked into the "plugins_loaded" action.
+	 *
+	 * @since 1.0.7
 	 * @return void
 	 */
-	public static function init() {
+	public function __construct() {
+		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
+	}
+
+	/**
+	 * Conditionally hook into WordPress.
+	 *
+	 * @since 1.0.7
+	 * @return void
+	 */
+	public function plugins_loaded() {
+
+		if ( is_user_logged_in() && QWall_DIC::get( 'settings' )->get( 'settings', 'disable_loggedin_users' ) ) {
+			return null;
+		}
+
+		self::analyze();
+	}
+
+	/**
+	 * Analyze request
+	 *
+	 * @since 1.0.7
+	 * @return void
+	 */
+	private static function analyze() {
 
 		// Analyze server variable
 		self::analyze_server( 'REQUEST_URI' );
@@ -84,16 +111,36 @@ class QWall_Firewall {
 	}
 
 	/**
-	 * You shall not pass
+	 * You shall not pass!
 	 *
 	 * @since 1.0.1
 	 * @return void
 	 */
 	private static function close() {
 
-		header('HTTP/1.1 403 Forbidden');
-		header('Status: 403 Forbidden');
-		header('Connection: Close');
+		$qwall_settings   = QWall_DIC::get( 'settings' );
+		$redirect_url     = $qwall_settings->get( 'settings', 'redirect_url' );
+		$http_status_code = $qwall_settings->get( 'settings', 'http_status_code' );
+		$server_response  = $qwall_settings->get( 'settings', 'server_response' );
+
+		if ( empty( $redirect_url ) ) {
+
+			if( ! isset( $_SERVER['SERVER_PROTOCOL'] ) || empty( $_SERVER['SERVER_PROTOCOL'] ) ) {
+				$_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.1';
+			}
+
+			$http_status_code_message = QWall_DIC::get( 'settings' )->get_http_status_codes( $http_status_code );
+
+			header( $_SERVER['SERVER_PROTOCOL'] . ' ' . $http_status_code_message, true, $http_status_code);
+			header( 'Connection: Close' );
+		} else {
+			header('Location: ' . $redirect_url, true, $http_status_code);
+		}
+
+		if( ! empty( $server_response ) ) {
+			exit( $server_response );
+		}
+
 		exit;
 	}
 
@@ -111,13 +158,25 @@ class QWall_Firewall {
 				
 		global $wpdb;
 
+		if( isset( $_SERVER['HTTP_USER_AGENT'] ) ) {
+			$user_agent = $_SERVER['HTTP_USER_AGENT'];
+		} else {
+			$user_agent = '';
+		}
+
+		if ( QWall_DIC::get( 'settings' )->get( 'settings', 'anonymize_ip' ) ) {
+			$ipv4 = long2ip( ip2long( $_SERVER['REMOTE_ADDR'] ) & 0xFFFFFF00 );
+		} else {
+			$ipv4 = $_SERVER['REMOTE_ADDR'];
+		}
+
 		$wpdb->insert(
 			$wpdb->base_prefix . 'qwall_monitor',
 			array(
 				'date_time'     => current_time( 'mysql' ),
 				'date_time_gmt' => current_time( 'mysql', 1 ),
-				'ipv4'          => sprintf( '%u', ip2long( $_SERVER['REMOTE_ADDR'] ) ),
-				'agent'         => $_SERVER['HTTP_USER_AGENT'],
+				'ipv4'          => sprintf( '%u', ip2long( $ipv4 ) ),
+				'agent'         => $user_agent,
 				'filter_group'  => $filter_group,
 				'filter_match'  => $filter_match,
 				'filter_input'  => $filter_input
@@ -125,5 +184,7 @@ class QWall_Firewall {
 		);
 	}
 }
+
+QWall_DIC::set( 'firewall', new QWall_Firewall() );
 
 endif;

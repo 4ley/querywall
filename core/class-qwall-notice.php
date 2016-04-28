@@ -41,7 +41,7 @@ class QWall_Notice {
 			$this->css_classes = array_merge( $this->css_classes, $css_classes );
 		}
 
-		add_action( 'admin_notices', array( $this, 'render_admin_notice' ) );
+		add_action( 'admin_notices', array( $this, 'display_admin_notice' ) );
 	}
 
 	/**
@@ -50,7 +50,7 @@ class QWall_Notice {
 	 * @since 1.0.6
 	 * @return void
 	 */
-	public function render_admin_notice() {
+	public function display_admin_notice() {
 		?>
 		<div class="<?php echo implode( ' ', $this->css_classes ); ?>">
 			<p><?php echo $this->message; ?></p>

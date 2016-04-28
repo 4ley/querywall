@@ -9,7 +9,7 @@ QueryWall analyzes all incoming HTTP requests and silently blocks malicious quer
 * Simple, fast and solid
 * Upload, activate, ready and done
 * Works in background
-* Identifies and forbids a wide range of malicious queries including [5G/6G Blacklist](https://perishablepress.com/6g-beta/)
+* Identifies and forbids a wide range of malicious queries
 
 ## Installation
 Upload, activate and done. Once active, QueryWall will automatically terminate any connection that is malicious.

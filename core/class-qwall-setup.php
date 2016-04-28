@@ -40,6 +40,8 @@ class QWall_Setup {
 	 * @return void
 	 */
 	public static function on_uninstall() {
+
+		self::remove_options();
 		self::remove_database_tables();
 		self::remove_scheduled_events();
 	}
@@ -115,6 +117,17 @@ class QWall_Setup {
 	private static function remove_scheduled_events() {
 
 		QWall_Util::unschedule_event( 'qwall_purge_logs' );
+	}
+
+	/**
+	 * Remove plugin options
+	 *
+	 * @since 1.0.7
+	 * @return void
+	 */
+	private static function remove_options() {
+
+		QWall_DIC::get( 'settings' )->delete( 'settings' );
 	}
 
 	/**

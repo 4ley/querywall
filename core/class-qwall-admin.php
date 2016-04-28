@@ -15,34 +15,68 @@ if ( ! class_exists( 'QWall_Admin' ) ):
 class QWall_Admin {
 
 	/**
-	 * Enqueue actions to build the admin pages.
+	 * Magic starts here.
 	 *
-	 * Calls all the needed actions to build any given admin page.
+	 * All custom functionality will be hooked into the "init" action.
+	 *
+	 * @since 1.0.7
+	 * @return void
+	 */
+	public function __construct() {
+		add_action( 'init', array( $this, 'init' ), 30 );
+	}
+
+	/**
+	 * Conditionally hook into WordPress.
+	 *
+	 * @since 1.0.7
+	 * @return void
+	 */
+	public function init() {
+
+		add_action( 'admin_menu', array( $this, 'cb_admin_menu' ) );
+		add_filter( 'plugin_row_meta', array( $this, 'cb_plugin_meta' ), 10, 2 );
+		add_action( 'qwall_purge_logs', array( $this, 'purge_logs' ) );
+	}
+
+	/**
+	 * Enqueue actions to build the admin menu.
+	 *
+	 * Calls all the needed actions to build the admin menu.
 	 *
 	 * @since 1.0.1
 	 * @return void
 	 */
-	public static function build_admin() {
+	public function cb_admin_menu() {
 
-		global $plugin_file;
-
+		// add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $function, $icon_url, $position );
 		add_menu_page(
 			__( 'Firewall Request Monitor', 'querywall' ),
 			__( 'QueryWall', 'querywall' ),
 			'manage_options',
 			'querywall',
-			array( __CLASS__, 'render_page' ),
+			array( $this, 'display_monitor_page' ),
 			'dashicons-shield'
+		);
+
+		// add_submenu_page( $parent_slug, $page_title, $menu_title, $capability, $menu_slug, $function );
+		add_submenu_page(
+			'querywall',
+			__( 'Firewall Request Monitor', 'querywall' ),
+			__( 'Monitor', 'querywall' ),
+			'manage_options',
+			'querywall',
+			array( $this, 'display_monitor_page' )
 		);
 	}
 
 	/**
-	 * Displays firewall logs table
+	 * Displays firewall request monitor page
 	 *
 	 * @since 1.0.1
 	 * @return void
 	 */
-	public static function render_page() {
+	public function display_monitor_page() {
 
 		require( dirname( __FILE__ ) . '/class-qwall-monitor.php' );
 
@@ -123,26 +157,12 @@ class QWall_Admin {
 	}
 
 	/**
-	 * Displays admin notice on success, error, warning, etc.
-	 *
-	 * @since 1.0.5
-	 * @return void
-	 */
-	public static function render_admin_notice( $message, $css_classes = 'notice-success is-dismissible' ) {
-		?>
-		<div class="notice <?php echo $css_classes; ?>">
-			<p><?php echo $message; ?></p>
-		</div>
-		<?php
-	}
-
-	/**
 	 * Purge blocked request logs.
 	 *
 	 * @since 1.0.5
 	 * @return int|boolen
 	 */
-	public static function purge_logs( $older_than_hours = 0 ) {
+	public function purge_logs( $older_than_hours = 0 ) {
 
 		global $wpdb;
 
@@ -158,18 +178,22 @@ class QWall_Admin {
 	/**
 	 * Add rating link to plugin page.
 	 *
-	 * @since 1.0.1
+	 * @since 1.0.7
 	 * @return array
 	 */
-	public static function rate( $links, $file ) {
+	public function cb_plugin_meta( $links, $file ) {
+
 		if ( strpos( $file, 'querywall.php' ) !== false ) {
-			$wp_url = 'https://wordpress.org/support/view/plugin-reviews/querywall?rate=5#postform';
-			$fb_url = 'https://www.facebook.com/querywall';
-			$links[] = '<a target="_blank" href="' . $wp_url . '" title="Rate and review QueryWall on WordPress.org">Rate this plugin</a>';
-			$links[] = '<a target="_blank" href="' . $fb_url . '" title="Visit QueryWall on Facebook" style="padding:0 5px;color:#fff;vertical-align:middle;border-radius:2px;background:#f5c140;">Visit on Facebook</a>';
+			// style="padding:0 2px;color:#fff;vertical-align:middle;border-radius:2px;background:#00b9eb;"
+			$links[] = '<a target="_blank" href="https://wordpress.org/support/view/plugin-reviews/querywall?rate=5#postform" title="Rate and review QueryWall on WordPress.org">Rate on WordPress.org</a>';
+			$links[] = '<a target="_blank" href="https://github.com/4ley/querywall" title="Contribute to QueryWall on GitHub">Contribute on GitHub</a>';
+			$links[] = '<a target="_blank" href="https://www.facebook.com/querywall" title="Visit QueryWall on Facebook">Visit on Facebook</a>';
 		}
+
 		return $links;
 	}
 }
+
+QWall_DIC::set( 'admin', new QWall_Admin() );
 
 endif;

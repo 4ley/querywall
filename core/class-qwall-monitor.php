@@ -84,7 +84,15 @@ class QWall_Monitor extends WP_List_Table {
 			case 'date_time':
 				return '<span title="' . $item['date_time'] . '">' . human_time_diff( $item['time_stamp'], current_time( 'timestamp' ) ) . ' ago';
 			case 'ipv4':
-				return long2ip( $item[ $column_name ] );
+
+				$ipv4 = long2ip( $item[ $column_name ] );
+				
+				if ( substr( $ipv4, -2 ) == '.0' ) {
+					$ipv4 = substr_replace( $ipv4, '***', -1 );
+				}
+
+				return $ipv4;
+
 			case 'filter_input':
 				return preg_replace( '/' . preg_quote( $item['filter_match'], '/' ) . '/i', '<strong>\\0</strong>', $item['filter_input'] );
 			default:

@@ -24,7 +24,7 @@ QueryWall analyzes all incoming HTTP requests and silently blocks malicious quer
 * Simple, fast and solid
 * Upload, activate, ready and done
 * Works in background
-* Identifies and forbids a wide range of malicious queries including [5G/6G Blacklist](https://perishablepress.com/6g-beta/)
+* Identifies and forbids a wide range of malicious queries
 
 **Contribution / Social**
 
@@ -45,6 +45,14 @@ Use the WordPress build-in update functionality, or remove the old version and r
 1. Firewall request monitor shows prevented attacks.
 
 == Changelog ==
+
+= 1.0.7 =
+
+* Options added: Disable for logged in users, Anonymize IP addresses, Server status code, Redirect URL, Server response
+
+= 1.0.6 =
+
+* Minor fixes
 
 = 1.0.5 =
 
