@@ -46,6 +46,10 @@ Use the WordPress build-in update functionality, or remove the old version and r
 
 == Changelog ==
 
+= 1.0.8 =
+
+* Security filters added and modified
+
 = 1.0.7 =
 
 * Options added: Disable for logged in users, Anonymize IP addresses, Server status code, Redirect URL, Server response
