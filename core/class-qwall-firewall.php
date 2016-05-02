@@ -15,20 +15,6 @@ if ( ! class_exists( 'QWall_Firewall' ) ):
 class QWall_Firewall {
 
 	/**
-	 * Query filters
-	 *
-	 * @since 1.0.1
-	 * @return void
-	 */
-	private static $filters = array(
-		'REQUEST_URI'     => array( 'eval\(', 'UNION(.*)SELECT', 'GROUP_CONCAT', 'CONCAT\s*\(', '\(null\)', 'base64_', '\/localhost', '\%2Flocalhost', '\/pingserver', '\/config\.', '\/wwwroot', '\/makefile', 'crossdomain\.', 'proc\/self\/environ', 'etc\/passwd', '\/https\:', '\/http\:', '\/ftp\:', '\/cgi\/', '\.cgi', '\.exe', '\.sql', '\.ini', '\.dll', '\.asp', '\.jsp', '\/\.bash', '\/\.git', '\/\.svn', '\/\.tar', ' ', '\<', '\>', '\/\=', '\.\.\.', '\+\+\+', '\/&&', '\/Nt\.', '\;Nt\.', '\=Nt\.', '\,Nt\.', '\.exec\(', '\)\.html\(', '\{x\.html\(', '\(function\(' ), '\.php\([0-9]+\)', '(benchmark|sleep)(\s|%20)*\(',
-		'QUERY_STRING'    => array( '\.\.\/', '127\.0\.0\.1', 'localhost', 'loopback', '\%0A', '\%0D', '\%00', '\%2e\%2e', 'input_file', 'execute', 'mosconfig', 'path\=\.', 'mod\=\.', 'wp-config\.php' ),
-		'HTTP_USER_AGENT' => array( 'acapbot', 'binlar', 'casper', 'cmswor', 'diavol', 'dotbot', 'finder', 'flicky', 'morfeus', 'nutch', 'planet', 'purebot', 'pycurl', 'semalt', 'skygrid', 'snoopy', 'sucker', 'turnit', 'vikspi', 'zmeu' ),
-		'FILES'           => array( '\.dll$', '\.rb$', '\.py$', '\.exe$', '\.php[3-6]?$', '\.pl$', '\.perl$', '\.ph[34]$', '\.phl$', '\.phtml$', '\.phtm$' ),
-
-	);
-
-	/**
 	 * Magic starts here.
 	 *
 	 * All custom functionality will be hooked into the "plugins_loaded" action.
@@ -37,7 +23,7 @@ class QWall_Firewall {
 	 * @return void
 	 */
 	public function __construct() {
-		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
+		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ), 1 );
 	}
 
 	/**
@@ -63,12 +49,20 @@ class QWall_Firewall {
 	 */
 	private static function analyze() {
 
-		// Analyze server variable
-		self::analyze_server( 'REQUEST_URI' );
-		self::analyze_server( 'QUERY_STRING' );
-		self::analyze_server( 'HTTP_USER_AGENT' );
-		// Analyze files variable
-		self::analyze_files( 'FILES' );
+		$attack_vectors = QWall_DIC::get( 'firewall_rules' )->get_attack_vectors();
+
+		foreach ( $attack_vectors as $idx => $vector ) {
+
+			$pattern = array_merge( $vector['default_pattern'], $vector['custom_pattern'] );
+
+			if ( 'files' == $idx ) {
+				// Analyze files variable
+				self::analyze_files( $vector['name'], $pattern );
+			} else {
+				// Analyze server variable
+				self::analyze_server( $vector['name'], $pattern );
+			}
+		}
 	}
 
 	/**
@@ -79,10 +73,10 @@ class QWall_Firewall {
 	 * @since 1.0.1
 	 * @return void
 	 */
-	private static function analyze_server( $var ) {
+	private static function analyze_server( $name, $pattern ) {
 
-		if ( isset( $_SERVER[ $var ] ) && ! empty( $_SERVER[ $var ] ) && preg_match( '/' . implode( '|', self::$filters[ $var ] )  . '/i', $_SERVER[ $var ], $matches ) ) {
-			self::log( $var, urldecode( $matches[0] ), urldecode( $_SERVER[ $var ] ) );
+		if ( isset( $_SERVER[ $name ] ) && ! empty( $_SERVER[ $name ] ) && ! empty( $pattern ) && preg_match( '/' . implode( '|', $pattern )  . '/is', $_SERVER[ $name ], $matches ) ) {
+			self::log( $name, urldecode( $matches[0] ), urldecode( $_SERVER[ $name ] ) );
 			self::close();
 		}
 	}
@@ -95,14 +89,14 @@ class QWall_Firewall {
 	 * @since 1.0.2
 	 * @return void
 	 */
-	private static function analyze_files( $var ) {
+	private static function analyze_files( $name, $pattern ) {
 
-		if ( isset( $_FILES ) && ! empty( $_FILES ) ) {
+		if ( isset( $_FILES ) && ! empty( $_FILES ) && ! empty( $pattern ) ) {
 			foreach ( $_FILES as $file ) {
 				$names = ( is_array( $file[ 'name' ] ) ? $file[ 'name' ] : array( $file[ 'name' ] ) );
-				foreach( $names as $name ) {
-					if ( preg_match( '/' . implode( '|', self::$filters[ $var ] )  . '/i', $name, $matches ) ) {
-						self::log( $var, $matches[0], $name );
+				foreach( $names as $file_name ) {
+					if ( preg_match( '/' . implode( '|', $pattern )  . '/is', $file_name, $matches ) ) {
+						self::log( $name, $matches[0], $file_name );
 						self::close();
 					}
 				}

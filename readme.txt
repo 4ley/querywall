@@ -25,6 +25,7 @@ QueryWall analyzes all incoming HTTP requests and silently blocks malicious quer
 * Upload, activate, ready and done
 * Works in background
 * Identifies and forbids a wide range of malicious queries
+* Add your own rules if you like
 
 **Contribution / Social**
 
@@ -45,6 +46,10 @@ Use the WordPress build-in update functionality, or remove the old version and r
 1. Firewall request monitor shows prevented attacks.
 
 == Changelog ==
+
+= 1.1.0 =
+
+* Rules can now be defined and managed
 
 = 1.0.8 =
 

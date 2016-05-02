@@ -338,6 +338,18 @@ class QWall_Settings {
 		return $settings;
 	}
 
+	/*public function cb_display_general_settings() {
+		
+		$options = array(
+			'title'             => 'Optionen',
+			'settings_fields'   => 'qwall_general_settings_group',
+			'settings_sections' => 'qwall-general-options',
+
+		);
+
+		echo $this->get_view( 'backend/settings', $options );
+	}*/
+
 	/**
 	 * Get option settings.
 	 *

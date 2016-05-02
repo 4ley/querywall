@@ -5,7 +5,7 @@
  * Description: Autopilot protection for your WordPress against malicious URL requests. QueryWall analyzes queries automically to protect your site against malicious URL requests.
  * Tags: firewall, security, protect, block, antivirus, defender, malicious, request, query, blacklist, url, eval, base64, hack, attack, brute force, infection, injection, malware, botnet, backdoor, web application firewall, xss, website security, wordpress security, secure, prevention, protection, trojan, virus, xss, waf, security audit, querywall, bbq, block bad queries, ninjafirewall, wordfence, bulletproof security, ithemes security, better wp security, sucuri, vaultpress, simple firewall
  * Usage: No configuration needed, just activate it.
- * Version: 1.0.8
+ * Version: 1.1.0
  * Author: 4ley
  * Author URI: https://github.com/4ley/querywall
  * Requires at least: 3.1
