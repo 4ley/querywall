@@ -94,7 +94,7 @@ class QWall_Monitor_List_Table extends WP_List_Table {
 				return $ipv4;
 
 			case 'filter_input':
-				return preg_replace( '/' . preg_quote( $item['filter_match'], '/' ) . '/i', '<strong>\\0</strong>', $item['filter_input'] );
+				return preg_replace( '/' . preg_quote( $item['filter_match'], '/' ) . '/i', '<strong>\\0</strong>', htmlspecialchars($item['filter_input']) );
 			default:
 				return $item[ $column_name ];
 		}
