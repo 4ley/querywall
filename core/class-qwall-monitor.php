@@ -67,6 +67,8 @@ class QWall_Monitor {
 	 */
 	public function display_monitor_page() {
 
+		global $wpdb;
+
 		require( dirname( __FILE__ ) . '/class-qwall-monitor-list-table.php' );
 
 		if ( $event_purge_next_run = wp_next_scheduled( 'qwall_purge_logs', 24 ) ) {
