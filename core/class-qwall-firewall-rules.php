@@ -5,7 +5,7 @@
  * Firewall Rules class for QueryWall.
  *
  * @package QueryWall
- * @since   1.1.0
+ * @since   1.1.1
  */
 
 defined( 'ABSPATH' ) or die( 'You shall not pass!' );
