@@ -47,6 +47,12 @@ Use the WordPress build-in update functionality, or remove the old version and r
 
 == Changelog ==
 
+= 1.1.1 =
+
+* More rules added
+* htmlspecialchars added to prevent XSS
+* Log size added
+
 = 1.1.0 =
 
 * Rules can now be defined and managed
