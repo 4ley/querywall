@@ -128,7 +128,7 @@ class QWall_Monitor {
 									<option value="168"><?php _e( '1 week', 'querywall' ); ?></option>
 									<option value="336"><?php _e( '2 weeks', 'querywall' ); ?></option>
 									<option value="672"><?php _e( '4 weeks', 'querywall' ); ?></option>
-									<option value="0"><?php _e( 'the big bang', 'querywall' ); ?></option>
+									<option value="0"><?php _e( 'wipe all', 'querywall' ); ?></option>
 								</select> |
 								<input class="button-primary" type="submit" name="qwall_purge_logs_now" value="<?php _e( 'Clear now', 'querywall' ); ?>">
 								<?php if ( $event_purge_next_run ) { ?>
