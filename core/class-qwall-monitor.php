@@ -82,7 +82,7 @@ class QWall_Monitor {
 		} else if ( $event_purge_next_run = wp_next_scheduled( 'qwall_purge_logs', 672 ) ) {
 			$event_purge_older_than = __( '4 weeks', 'querywall' );
 		} else if ( $event_purge_next_run = wp_next_scheduled( 'qwall_purge_logs', 0 ) ) {
-			$event_purge_older_than = '"' . __( 'the big bank', 'querywall' ) . '"';
+			$event_purge_older_than = '"' . __( 'wipe all', 'querywall' ) . '"';
 		} else {
 			$event_purge_next_run   = false;
 			$event_purge_older_than = false;
