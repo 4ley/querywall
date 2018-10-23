@@ -3,7 +3,7 @@
 Contributors: 4ley
 Tags: firewall, security, protect, block, antivirus, defender, malicious, request, query, blacklist, url, eval, base64, hack, attack, brute force, infection, injection, malware, botnet, backdoor, web application firewall, xss, website security, wordpress security, secure, prevention, protection, trojan, virus, xss, waf, security audit, querywall, bbq, block bad queries, ninjafirewall, wordfence, bulletproof security, ithemes security, better wp security, sucuri, vaultpress, simple firewall
 Requires at least: 3.1
-Tested up to: 4.9
+Tested up to: 5.0
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
