@@ -88,6 +88,8 @@ class QWall_Monitor {
 			$event_purge_older_than = false;
 		}
 
+		$log_size = $wpdb->get_var( "SELECT ROUND(((data_length + index_length) / 1024 / 1024), 2) FROM information_schema.TABLES WHERE TABLE_SCHEMA = '" . $wpdb->dbname . "' AND TABLE_NAME = '" . $wpdb->prefix . "qwall_monitor';" );
+
 		$fw_monitor = new QWall_Monitor_List_Table();
 		$fw_monitor->prepare_items();
 		?>
@@ -133,7 +135,7 @@ class QWall_Monitor {
 									<input class="button-primary" type="submit" name="qwall_purge_logs_unschedule" value="<?php _e( 'Unschedule', 'querywall' ); ?>">
 								<?php } else { ?>
 									<input class="button-primary" type="submit" name="qwall_purge_logs_daily" value="<?php _e( 'Clear daily', 'querywall' ); ?>">
-								<?php } ?>
+								<?php } ?> | Log size <?php echo $log_size ?> MB
 								<?php if ( $event_purge_next_run ) { ?>
 									<p><?php printf( __( 'Logs older than %s are scheduled to be purged in <span title="%s">%s</span>.', 'querywall' ), $event_purge_older_than, get_date_from_gmt( date( 'Y-m-d H:i:s', $event_purge_next_run ) ), human_time_diff( $event_purge_next_run, current_time( 'timestamp', 1 ) ) ); ?></p>
 								<?php } ?>
@@ -158,9 +160,9 @@ class QWall_Monitor {
 		global $wpdb;
 
 		if ( $older_than_hours == 0 ) {
-			return $wpdb->query( "DELETE FROM `" . $wpdb->base_prefix . "qwall_monitor`;" );
+			return $wpdb->query( "DELETE FROM `" . $wpdb->prefix . "qwall_monitor`;" );
 		} else if( in_array( $older_than_hours, array( 24, 72, 120, 168, 336, 672 ) ) ) {
-			return $wpdb->query( "DELETE FROM `" . $wpdb->base_prefix . "qwall_monitor` WHERE `date_time_gmt` < '" . current_time( 'mysql', 1 ) . "' - INTERVAL " . esc_sql( ( int ) $older_than_hours ) . " HOUR;" );
+			return $wpdb->query( "DELETE FROM `" . $wpdb->prefix . "qwall_monitor` WHERE `date_time_gmt` < '" . current_time( 'mysql', 1 ) . "' - INTERVAL " . esc_sql( ( int ) $older_than_hours ) . " HOUR;" );
 		}
 
 		return false;
